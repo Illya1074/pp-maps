@@ -1,23 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import UniversityMap from "./features/UniversityMap"
+import {useState, createContext} from "react";
+import {testMap} from "./data";
+import {mapOfUniversity} from "./utils/mapOfUniversity";
+
+
+export const TrackGraphContext = createContext(null);
 
 function App() {
+  const trackGraph = {}
+  const [generatedMap, setGeneratedMap] =  useState(testMap);
+
+  const updateItem = (id, updatedItem) => {
+    const newMap = [...generatedMap]
+    for(let i = 0; i < newMap.length; i++) {
+      for(let j = 0; j < newMap[i].length; j++) {
+        if(newMap[i][j].id === id){
+          newMap[i][j] = updatedItem;
+          setGeneratedMap(newMap);
+        }
+      }
+    }  
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TrackGraphContext.Provider value={trackGraph} >
+        <UniversityMap generatedMap={generatedMap} updateItem={updateItem}/>
+      </TrackGraphContext.Provider>
     </div>
   );
 }
