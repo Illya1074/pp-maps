@@ -3,9 +3,16 @@ import UniversityMap from "./features/UniversityMap"
 import {useState, createContext} from "react";
 import {testMap} from "./data";
 import {mapOfUniversity} from "./utils/mapOfUniversity";
+import Constructor from "./constructor/Constructor";
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
 
 export const TrackGraphContext = createContext(null);
+export const ConstructorContext = createContext(null);
+
 
 function App() {
   const trackGraph = {}
@@ -23,10 +30,28 @@ function App() {
     }  
   }
 
+
+  const router = createBrowserRouter([
+    {
+      path: "/map-view",
+      element: <TrackGraphContext.Provider value={trackGraph}>
+        <UniversityMap generatedMap={generatedMap} updateItem={updateItem}/>
+      </TrackGraphContext.Provider>,
+    },
+    {
+      path: "/constructor",
+      element: <Constructor/>,
+    },
+    {
+      path: "/",
+      element: <h1>Find your class App!!!</h1>,
+    },
+  ]);
+
   return (
     <div className="App">
       <TrackGraphContext.Provider value={trackGraph} >
-        <UniversityMap generatedMap={generatedMap} updateItem={updateItem}/>
+        <RouterProvider router={router} />
       </TrackGraphContext.Provider>
     </div>
   );
